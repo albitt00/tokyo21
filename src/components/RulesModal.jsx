@@ -106,7 +106,7 @@ export default function RulesModal() {
                   <li>Se i dadi reali sono <strong>uguali o superiori</strong> al dichiarato: chi ha <em>dubitato</em> perde <strong>1 vita</strong>.</li>
                   <li>Se i dadi reali sono <strong>inferiori</strong> al dichiarato (bluff): chi ha <em>lanciato</em> perde <strong>1 vita</strong>.</li>
                   <li>
-                    <strong className="gold-text">Regola Speciale Tokyo 21</strong>: se era stato dichiarato <strong>21 (Tokyo)</strong>, chi perde il confronto <strong>perde 2 vite!</strong>
+                    <strong className="gold-text">Tokyo 21</strong>: è il punteggio massimo assoluto e batte qualsiasi combinazione (chi perde il round perde sempre 1 vita).
                   </li>
                 </ul>
               </li>

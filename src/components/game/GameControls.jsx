@@ -321,7 +321,7 @@ export default function GameControls({
             {lastRoundResult.isTokyo && (
               <div className="tokyo-penalty-banner">
                 <Flame size={18} className="gold-text" />
-                <span>Regola Speciale Tokyo 21: Perde ben 2 vite!</span>
+                <span>Round con TOKYO 21: perde 1 vita!</span>
               </div>
             )}
           </div>

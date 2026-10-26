@@ -133,7 +133,7 @@ export function resolveDoubt(actualRoll, declaredValue, rollerId, rollerName, do
   const wasBluff = !isTruth; // Il lanciatore ha bluffato (aveva meno)
 
   const isTokyo = declaredValue === TOKYO_SCORE;
-  const livesLost = isTokyo ? 2 : 1;
+  const livesLost = 1; // Chi perde il confronto perde 1 vita anche su Tokyo 21
 
   let loserId;
   let loserName;
@@ -142,25 +142,25 @@ export function resolveDoubt(actualRoll, declaredValue, rollerId, rollerName, do
   let summaryMessage = '';
 
   if (wasBluff) {
-    // Bluff scoperto! Chi ha lanciato perde le vite
+    // Bluff scoperto! Chi ha lanciato perde 1 vita
     loserId = rollerId;
     loserName = rollerName;
     winnerId = doubterId;
     winnerName = doubterName;
 
     summaryMessage = isTokyo
-      ? `Bluff scoperto su TOKYO 21! ${rollerName} aveva ${actualRoll} ma ha dichiarato ${declaredValue}. Perde 2 vite!`
-      : `Bluff scoperto! ${rollerName} aveva ${actualRoll} ma ha dichiarato ${declaredValue}. Perde ${livesLost} vita!`;
+      ? `Bluff scoperto su TOKYO 21! ${rollerName} aveva ${actualRoll} ma ha dichiarato ${declaredValue}. Perde 1 vita!`
+      : `Bluff scoperto! ${rollerName} aveva ${actualRoll} ma ha dichiarato ${declaredValue}. Perde 1 vita!`;
   } else {
-    // Era vero (o persino superiore)! Chi ha dubitato perde le vite
+    // Era vero (o persino superiore)! Chi ha dubitato perde 1 vita
     loserId = doubterId;
     loserName = doubterName;
     winnerId = rollerId;
     winnerName = rollerName;
 
     summaryMessage = isTokyo
-      ? `Era davvero TOKYO 21! ${doubterName} ha dubitato a torto e perde 2 vite!`
-      : `${rollerName} diceva la verità (${actualRoll} >= ${declaredValue}). ${doubterName} perde ${livesLost} vita!`;
+      ? `Era davvero TOKYO 21! ${doubterName} ha dubitato a torto e perde 1 vita!`
+      : `${rollerName} diceva la verità (${actualRoll} >= ${declaredValue}). ${doubterName} perde 1 vita!`;
   }
 
   return {

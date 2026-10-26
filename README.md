@@ -39,7 +39,7 @@ Si gioca con **2 dadi a 6 facce**. Ogni lancio viene letto ordinando sempre la *
   - Il bussolotto si alza per tutti i giocatori mostrando il valore reale dei dadi:
     - Se `valoreReale >= valoreDichiarato`: chi ha **dubitato** perde **1 vita**.
     - Se `valoreReale < valoreDichiarato` (bluff scoperto): chi ha **lanciato** perde **1 vita**.
-    - **⚠️ REGOLA SPECIALE TOKYO 21**: Se il valore dichiarato era `21` (Tokyo), chi perde il confronto **perde 2 vite invece di 1!**
+    - **🔥 TOKYO 21**: È il punteggio massimo assoluto (chi perde il round perde 1 vita).
   - Chi ha perso la vita (se è ancora in gioco, altrimenti il successivo giocatore vivo) inizia il nuovo round.
 - **Fine Partita (`GAME_OVER`)**:
   - A 0 vite il giocatore è eliminato e diventa spettatore.

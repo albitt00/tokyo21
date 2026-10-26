@@ -35,7 +35,7 @@ export default function DeclaredBadge({
 
       <div className="declared-subinfo">
         {isTokyo ? (
-          <span className="tokyo-warning-chip">⚠️ TOKYO 21! Penale: 2 VITE in caso di sconfitta!</span>
+          <span className="tokyo-warning-chip">🔥 TOKYO 21! Punteggio massimo assoluto!</span>
         ) : isDouble ? (
           <span className="double-info-chip">Doppia {declaredValue} (batte tutti i normali)</span>
         ) : (
