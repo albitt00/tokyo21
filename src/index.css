@@ -1,0 +1,76 @@
+/* ==========================================================================
+   TOKYO 21 - Mobile-First Theme & CSS Reset
+   Dark Lounge / Tavolo da Gioco Elegante (Verde Scuro, Oro, Nero, Neon)
+   ========================================================================== */
+
+:root {
+  /* Tavolozza Casino Lounge */
+  --bg-deep-space: #070d0b;
+  --bg-table-felt: #0c1a14;
+  --bg-felt-accent: #132a21;
+  --bg-surface-glass: rgba(18, 38, 30, 0.75);
+  --bg-surface-elevated: rgba(26, 52, 42, 0.85);
+  --bg-modal-backdrop: rgba(3, 8, 6, 0.88);
+
+  /* Accenti Oro & Neon */
+  --gold-primary: #f5c542;
+  --gold-light: #ffe58f;
+  --gold-glow: rgba(245, 197, 66, 0.45);
+  --gold-gradient: linear-gradient(135deg, #fce084 0%, #e6a719 100%);
+  
+  /* Accenti Gioco */
+  --accent-green-neon: #10b981;
+  --accent-green-glow: rgba(16, 185, 129, 0.4);
+  --accent-red-heart: #ef4444;
+  --accent-red-glow: rgba(239, 68, 68, 0.4);
+  --accent-blue-neon: #38bdf8;
+
+  /* Testi e bordi */
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --text-dim: #64748b;
+  --border-glass: rgba(245, 197, 66, 0.18);
+  --border-subtle: rgba(255, 255, 255, 0.08);
+
+  /* Ombre ed effetti */
+  --shadow-lounge: 0 12px 36px -6px rgba(0, 0, 0, 0.75);
+  --shadow-gold: 0 4px 20px rgba(245, 197, 66, 0.25);
+  --shadow-dice: 2px 4px 10px rgba(0, 0, 0, 0.5), inset 0 1px 2px rgba(255, 255, 255, 0.6);
+
+  /* Tipografia */
+  --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+input, textarea {
+  user-select: auto;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
+  overflow: hidden;
+  background-color: var(--bg-deep-space);
+  color: var(--text-main);
+  font-family: var(--font-family);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle at 50% 20%, #10241c 0%, #060b09 100%);
+}
