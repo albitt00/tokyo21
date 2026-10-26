@@ -714,7 +714,8 @@
   flex-direction: column;
   justify-content: space-between;
   height: 100%;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
   position: relative;
 }
 
@@ -1219,6 +1220,7 @@
   backdrop-filter: blur(12px);
   border-top: 1px solid var(--border-subtle);
   z-index: 30;
+  flex-shrink: 0;
 }
 
 .controls-phase-wrap {
@@ -1348,16 +1350,17 @@
 
 /* REVEAL OUTCOME CARD */
 .reveal-outcome-card {
-  background: rgba(14, 30, 24, 0.9);
+  background: rgba(14, 30, 24, 0.95);
   border: 1px solid var(--border-glass);
   border-radius: 16px;
-  padding: 12px 14px;
+  padding: 10px 14px 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
 }
 
 .outcome-header {
   display: flex;
   justify-content: center;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 
 .outcome-badge {
@@ -1385,14 +1388,14 @@
 
 .outcome-details {
   text-align: center;
-  margin: 6px 0 10px;
+  margin: 4px 0 6px;
 }
 
 .outcome-summary {
-  font-size: 0.85rem;
+  font-size: 0.88rem;
   color: #fff;
-  font-weight: 600;
-  margin-bottom: 8px;
+  font-weight: 700;
+  margin-bottom: 6px;
 }
 
 .comparison-chips {
@@ -1432,14 +1435,27 @@
   align-items: center;
   justify-content: center;
   gap: 6px;
-  margin-top: 6px;
+  margin-top: 4px;
   font-size: 0.78rem;
   font-weight: 800;
   color: #fb923c;
 }
 
 .next-round-btn {
-  height: 48px;
+  height: 54px;
+  min-height: 54px;
+  font-size: 1.05rem;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: var(--gold-gradient);
+  color: #0c1a14;
+  box-shadow: 0 4px 22px rgba(245, 197, 66, 0.55);
+  border-radius: 14px;
+  margin-top: 6px;
 }
 
 /* ==========================================================================

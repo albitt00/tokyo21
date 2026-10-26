@@ -93,12 +93,14 @@ export default function GameScreen() {
           isMyTurn={isMyTurn}
         />
 
-        <DeclaredBadge
-          declaredValue={declaredValue}
-          previousPlayerName={previousPlayer ? previousPlayer.nickname : ''}
-          phase={phase}
-          isMyTurn={isMyTurn}
-        />
+        {!isRevealed && (
+          <DeclaredBadge
+            declaredValue={declaredValue}
+            previousPlayerName={previousPlayer ? previousPlayer.nickname : ''}
+            phase={phase}
+            isMyTurn={isMyTurn}
+          />
+        )}
       </div>
 
       {/* Controlli di Gioco Contestuali in Basso */}

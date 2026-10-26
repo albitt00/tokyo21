@@ -1,7 +1,6 @@
 import React from 'react';
 import { useGame } from '../context/GameContext';
-import { Volume2, VolumeX, HelpCircle, Database, LogOut } from 'lucide-react';
-import { isFirebaseConfigured } from '../firebase';
+import { Volume2, VolumeX, HelpCircle, LogOut } from 'lucide-react';
 import { playClickSound } from '../utils/soundEffects';
 
 export default function Header() {
@@ -11,10 +10,7 @@ export default function Header() {
     soundOn,
     toggleSound,
     setShowRulesModal,
-    setShowConfigModal,
   } = useGame();
-
-  const isConfigured = isFirebaseConfigured();
 
   const handleSound = () => {
     toggleSound();
@@ -24,11 +20,6 @@ export default function Header() {
   const handleRules = () => {
     playClickSound();
     setShowRulesModal(true);
-  };
-
-  const handleConfig = () => {
-    playClickSound();
-    setShowConfigModal(true);
   };
 
   const handleLeave = () => {
@@ -54,17 +45,6 @@ export default function Header() {
       </div>
 
       <div className="header-actions">
-        {/* Indicatore / configuratore Firebase */}
-        <button
-          className={`icon-btn ${isConfigured ? 'icon-btn-success' : 'icon-btn-warning'}`}
-          onClick={handleConfig}
-          title={isConfigured ? 'Firebase Connesso' : 'Configura Firebase'}
-          aria-label="Configurazione Firebase"
-        >
-          <Database size={18} />
-          {!isConfigured && <span className="warning-badge">!</span>}
-        </button>
-
         {/* Toggle Audio */}
         <button
           className="icon-btn"

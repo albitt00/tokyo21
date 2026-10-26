@@ -332,8 +332,8 @@ export default function GameControls({
             onClick={handleNextRound}
             disabled={isSubmitting}
           >
-            <ArrowRight size={20} />
-            <span>Prossimo Round</span>
+            <span>PROSSIMO ROUND</span>
+            <ArrowRight size={22} />
           </button>
         </div>
       )}
