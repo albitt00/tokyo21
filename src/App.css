@@ -1448,13 +1448,17 @@
 .score-selector-modal {
   width: 95%;
   max-width: 440px;
-  max-height: 85dvh;
+  max-height: 88dvh;
   display: flex;
   flex-direction: column;
   padding: 16px;
+  overflow: hidden;
 }
 
 .selector-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   margin-bottom: 8px;
 }
 
@@ -1498,6 +1502,37 @@
   color: #fff;
 }
 
+.quick-truth-direct-btn {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  border: 1px solid #34d399;
+  color: #fff;
+  border-radius: 10px;
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 2px 10px rgba(16, 185, 129, 0.4);
+  transition: all 0.15s ease;
+}
+
+.quick-truth-direct-btn:hover, .quick-truth-direct-btn:active {
+  transform: translateY(-1px);
+  filter: brightness(1.1);
+}
+
+.must-bluff-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #fb923c;
+  background: rgba(249, 115, 22, 0.15);
+  border: 1px solid rgba(249, 115, 22, 0.3);
+  padding: 4px 8px;
+  border-radius: 8px;
+}
+
 .truth-quick-btn {
   background: rgba(16, 185, 129, 0.2);
   border: 1px solid rgba(16, 185, 129, 0.4);
@@ -1528,8 +1563,11 @@
 }
 
 .selector-scroll-area {
-  flex: 1;
+  flex: 1 1 auto;
+  min-height: 80px;
+  max-height: 42dvh;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   padding-right: 4px;
   display: flex;
   flex-direction: column;
@@ -1635,7 +1673,10 @@
 }
 
 .selector-footer {
-  margin-top: 12px;
+  flex-shrink: 0;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border-subtle);
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -1654,18 +1695,28 @@
 }
 
 .confirm-declaration-btn {
-  height: 52px;
+  height: 54px;
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
 }
 
 /* ==========================================================================
    MODALI CONDIVISI (RULES, CONFIG, VICTORY)
    ========================================================================== */
 .modal-backdrop {
-  position: absolute;
-  inset: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
   background: var(--bg-modal-backdrop);
   backdrop-filter: blur(8px);
-  z-index: 100;
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 99999;
   display: flex;
   align-items: center;
   justify-content: center;

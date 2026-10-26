@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import confetti from 'canvas-confetti';
 import { Crown, RotateCcw, LogOut, Award, Heart } from 'lucide-react';
 import { playVictorySound, playClickSound } from '../../utils/soundEffects';
@@ -57,7 +58,7 @@ export default function GameOverModal({
     await resetRoomToLobby(roomCode);
   };
 
-  return (
+  const modalJSX = (
     <div className="modal-backdrop">
       <div className="modal-content victory-modal">
         <div className="victory-crown-wrap">
@@ -100,4 +101,8 @@ export default function GameOverModal({
       </div>
     </div>
   );
+
+  return typeof document !== 'undefined'
+    ? createPortal(modalJSX, document.body)
+    : modalJSX;
 }

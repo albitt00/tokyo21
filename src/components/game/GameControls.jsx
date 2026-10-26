@@ -220,42 +220,59 @@ export default function GameControls({
       {phase === 'DECISION' && (
         <div className="controls-phase-wrap">
           {isMyTurn ? (
-            <div className="decision-actions-grid">
-              <span className="decision-headline">
-                <strong>{previousPlayer.nickname}</strong> ti passa il bussolotto con{' '}
-                <span className="gold-text bold-value">{declaredValue}</span>. Cosa fai?
-              </span>
-
-              <div className="decision-buttons-row">
-                {/* DUBITO! */}
+            localDiceState ? (
+              <div className="my-turn-actions">
+                <span className="turn-action-prompt">
+                  Hai accettato! Dadi reali: <strong>{localDiceState.actualRoll}</strong>. Ora scegli cosa dichiarare:
+                </span>
                 <button
                   type="button"
-                  className="danger-btn dubito-btn pulse-red"
-                  onClick={handleDubito}
+                  className="primary-btn pass-action-btn pulse-glow"
+                  onClick={() => setShowScoreModal(true)}
                   disabled={isSubmitting}
                 >
-                  <AlertOctagon size={22} />
-                  <div className="btn-text-col">
-                    <span className="btn-main-label">DUBITO!</span>
-                    <span className="btn-sub-label">Alza il bussolotto</span>
-                  </div>
-                </button>
-
-                {/* CREDO */}
-                <button
-                  type="button"
-                  className="credo-btn pulse-green"
-                  onClick={handleCredoAccept}
-                  disabled={isSubmitting}
-                >
-                  <CheckCircle2 size={22} />
-                  <div className="btn-text-col">
-                    <span className="btn-main-label">CREDO</span>
-                    <span className="btn-sub-label">Accetta &amp; Rilancia</span>
-                  </div>
+                  <Send size={20} />
+                  <span>Scegli cosa dichiarare e Passa a {nextPlayerName}</span>
                 </button>
               </div>
-            </div>
+            ) : (
+              <div className="decision-actions-grid">
+                <span className="decision-headline">
+                  <strong>{previousPlayer.nickname}</strong> ti passa il bussolotto con{' '}
+                  <span className="gold-text bold-value">{declaredValue}</span>. Cosa fai?
+                </span>
+
+                <div className="decision-buttons-row">
+                  {/* DUBITO! */}
+                  <button
+                    type="button"
+                    className="danger-btn dubito-btn pulse-red"
+                    onClick={handleDubito}
+                    disabled={isSubmitting}
+                  >
+                    <AlertOctagon size={22} />
+                    <div className="btn-text-col">
+                      <span className="btn-main-label">DUBITO!</span>
+                      <span className="btn-sub-label">Alza il bussolotto</span>
+                    </div>
+                  </button>
+
+                  {/* CREDO */}
+                  <button
+                    type="button"
+                    className="credo-btn pulse-green"
+                    onClick={handleCredoAccept}
+                    disabled={isSubmitting}
+                  >
+                    <CheckCircle2 size={22} />
+                    <div className="btn-text-col">
+                      <span className="btn-main-label">CREDO</span>
+                      <span className="btn-sub-label">Accetta &amp; Rilancia</span>
+                    </div>
+                  </button>
+                </div>
+              </div>
+            )
           ) : (
             <div className="waiting-turn-box">
               <div className="pulse-dot"></div>
