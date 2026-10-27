@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useGame } from '../context/GameContext';
-import { startGame, updateRoomSettings } from '../services/gameService';
+import { startGame, updateRoomSettings, addBotPlayer, removeBotPlayer } from '../services/gameService';
 import {
   Copy,
   Check,
@@ -13,6 +13,8 @@ import {
   ArrowRight,
   ShieldCheck,
   AlertCircle,
+  Bot,
+  Trash2,
 } from 'lucide-react';
 import { playClickSound } from '../utils/soundEffects';
 
@@ -28,6 +30,30 @@ export default function LobbyScreen() {
   const [copied, setCopied] = useState(false);
   const [startingError, setStartingError] = useState('');
   const [isStarting, setIsStarting] = useState(false);
+  const [isAddingBot, setIsAddingBot] = useState(false);
+
+  const handleAddBot = async () => {
+    if (!isHost || isAddingBot || players.length >= 8) return;
+    playClickSound();
+    setIsAddingBot(true);
+    try {
+      await addBotPlayer(roomCode);
+    } catch (err) {
+      console.error('Errore aggiunta bot:', err);
+    } finally {
+      setIsAddingBot(false);
+    }
+  };
+
+  const handleRemoveBot = async (botId) => {
+    if (!isHost) return;
+    playClickSound();
+    try {
+      await removeBotPlayer(roomCode, botId);
+    } catch (err) {
+      console.error('Errore rimozione bot:', err);
+    }
+  };
 
   if (!roomData) return null;
 
@@ -119,13 +145,27 @@ export default function LobbyScreen() {
             <Users size={18} className="gold-text" />
             <h3>Giocatori Connessi ({players.length})</h3>
           </div>
-          <span className="badge-chip min-players-badge">
-            {players.length < 2 ? 'Min. 2' : 'Pronti!'}
-          </span>
+          <div className="players-header-actions">
+            {isHost && (
+              <button
+                type="button"
+                className="secondary-btn btn-sm add-bot-btn"
+                onClick={handleAddBot}
+                disabled={players.length >= 8 || isAddingBot}
+                title="Aggiungi un giocatore bot gestito dall'IA"
+              >
+                <Bot size={15} className="gold-text" />
+                <span>{isAddingBot ? 'Aggiunta...' : '+ Bot IA'}</span>
+              </button>
+            )}
+            <span className="badge-chip min-players-badge">
+              {players.length < 2 ? 'Min. 2' : 'Pronti!'}
+            </span>
+          </div>
         </div>
 
         <div className="players-list">
-          {players.map((p, index) => {
+          {players.map((p) => {
             const isMe = p.id === playerId;
             return (
               <div key={p.id} className={`player-row ${isMe ? 'player-row-me' : ''}`}>
@@ -139,14 +179,30 @@ export default function LobbyScreen() {
                           <Crown size={11} /> Host
                         </span>
                       )}
+                      {p.isBot && (
+                        <span className="tag bot-tag">
+                          <Bot size={11} /> Bot IA
+                        </span>
+                      )}
                       {isMe && <span className="tag me-tag">Tu</span>}
                     </div>
                   </div>
                 </div>
                 <div className="player-status-slot">
-                  <span className="ready-indicator">
-                    <ShieldCheck size={16} className="gold-text" />
-                  </span>
+                  {isHost && p.isBot ? (
+                    <button
+                      type="button"
+                      className="remove-bot-btn"
+                      onClick={() => handleRemoveBot(p.id)}
+                      title="Rimuovi questo Bot"
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  ) : (
+                    <span className="ready-indicator">
+                      <ShieldCheck size={16} className="gold-text" />
+                    </span>
+                  )}
                 </div>
               </div>
             );

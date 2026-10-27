@@ -18,11 +18,11 @@ export default function ScoreSelectorModal({
   onConfirmDeclaration,
   onCancel,
 }) {
-  if (!isOpen) return null;
-
   // Seleziona di default il tiro reale se è una dichiarazione valida, altrimenti null
   const isActualValid = isScoreValidRaise(actualRoll, previousDeclaredValue, strictRaise);
   const [selectedScore, setSelectedScore] = useState(isActualValid ? actualRoll : null);
+
+  if (!isOpen) return null;
 
   const handleSelect = (score) => {
     if (!isScoreValidRaise(score, previousDeclaredValue, strictRaise)) return;

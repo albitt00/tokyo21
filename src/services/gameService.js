@@ -207,6 +207,97 @@ export async function updateRoomSettings(roomCode, settings) {
 }
 
 /**
+ * Aggiunge un bot IA alla stanza (solo Host)
+ */
+export async function addBotPlayer(roomCode) {
+  const botId = 'bot_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6);
+  const botNames = [
+    'TokyoBot 🤖',
+    'CyberDice 🤖',
+    'NeonBluff 🤖',
+    'MechaMia 🤖',
+    'RoboRoller 🤖',
+    'SamuraiBot 🤖',
+    'RoninAI 🤖',
+    'ShogunDice 🤖',
+  ];
+
+  if (isFirebaseConfigured()) {
+    const roomRef = ref(database, 'rooms/' + roomCode);
+    const snapshot = await get(roomRef);
+    if (!snapshot.exists()) return null;
+
+    const roomData = snapshot.val();
+    const existingPlayers = roomData.players || {};
+    const existingCount = Object.keys(existingPlayers).length;
+    const startingLives = roomData.settings?.startingLives ?? 6;
+
+    const existingNames = Object.values(existingPlayers).map((p) => p.nickname);
+    const chosenName =
+      botNames.find((n) => !existingNames.includes(n)) || ('Bot ' + (existingCount + 1) + ' 🤖');
+
+    const botPlayer = {
+      id: botId,
+      nickname: chosenName,
+      avatar: '🤖',
+      lives: startingLives,
+      isHost: false,
+      isBot: true,
+      orderIndex: existingCount,
+      joinedAt: Date.now(),
+      connected: true,
+    };
+
+    const playerRef = ref(database, 'rooms/' + roomCode + '/players/' + botId);
+    await set(playerRef, botPlayer);
+    return botId;
+  } else {
+    const room = getMockRoom(roomCode);
+    if (!room) return null;
+
+    const existingPlayers = room.players || {};
+    const existingCount = Object.keys(existingPlayers).length;
+    const startingLives = room.settings?.startingLives ?? 6;
+
+    const existingNames = Object.values(existingPlayers).map((p) => p.nickname);
+    const chosenName =
+      botNames.find((n) => !existingNames.includes(n)) || ('Bot ' + (existingCount + 1) + ' 🤖');
+
+    room.players = room.players || {};
+    room.players[botId] = {
+      id: botId,
+      nickname: chosenName,
+      avatar: '🤖',
+      lives: startingLives,
+      isHost: false,
+      isBot: true,
+      orderIndex: existingCount,
+      joinedAt: Date.now(),
+      connected: true,
+    };
+
+    saveMockRoom(roomCode, room);
+    return botId;
+  }
+}
+
+/**
+ * Rimuove un bot IA dalla stanza (solo Host)
+ */
+export async function removeBotPlayer(roomCode, botId) {
+  if (isFirebaseConfigured()) {
+    const playerRef = ref(database, 'rooms/' + roomCode + '/players/' + botId);
+    await set(playerRef, null);
+  } else {
+    const room = getMockRoom(roomCode);
+    if (room && room.players) {
+      delete room.players[botId];
+      saveMockRoom(roomCode, room);
+    }
+  }
+}
+
+/**
  * Avvia la partita dalla Lobby (solo Host)
  */
 export async function startGame(roomCode) {

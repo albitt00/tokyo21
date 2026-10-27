@@ -5,6 +5,7 @@ import DiceCup from './game/DiceCup';
 import DeclaredBadge from './game/DeclaredBadge';
 import GameControls from './game/GameControls';
 import GameOverModal from './game/GameOverModal';
+import { useBotManager } from '../hooks/useBotManager.js';
 
 export default function GameScreen() {
   const {
@@ -17,6 +18,13 @@ export default function GameScreen() {
 
   // Stato locale per i dadi appena lanciati dal giocatore di turno (prima di passare)
   const [localDiceState, setLocalDiceState] = useState(null);
+
+  // Pilota automatico e logica per i bot in partita
+  const { botActionMessage } = useBotManager({
+    roomCode,
+    roomData,
+    playerId,
+  });
 
   if (!roomData) return null;
 
@@ -66,9 +74,15 @@ export default function GameScreen() {
           <span>ROUND {roundNumber}</span>
         </div>
         <div className="table-status-msg">
-          {phase === 'FIRST_ROLL' && 'Inizio Round: Primo Lancio'}
-          {phase === 'DECISION' && 'Decisione Ricevente'}
-          {phase === 'REVEAL' && 'Esito del Round'}
+          {botActionMessage ? (
+            <span className="bot-status-pulse">🤖 {botActionMessage}</span>
+          ) : (
+            <>
+              {phase === 'FIRST_ROLL' && 'Inizio Round: Primo Lancio'}
+              {phase === 'DECISION' && 'Decisione Ricevente'}
+              {phase === 'REVEAL' && 'Esito del Round'}
+            </>
+          )}
         </div>
       </div>
 

@@ -47,6 +47,7 @@ export default function PlayerRoster({
               <div className="chip-details">
                 <div className="chip-name-row">
                   <span className="chip-nickname">{player.nickname}</span>
+                  {player.isBot && <span className="chip-bot-tag">BOT</span>}
                   {isMe && <span className="chip-me-tag">Tu</span>}
                 </div>
 
