@@ -19,6 +19,9 @@ export default function GameScreen() {
   // Stato locale per i dadi appena lanciati dal giocatore di turno (prima di passare)
   const [localDiceState, setLocalDiceState] = useState(null);
 
+  // Stato di scuotimento/animazione dei dadi per la suspense al lancio
+  const [isRolling, setIsRolling] = useState(false);
+
   // Pilota automatico e logica per i bot in partita
   const { botActionMessage } = useBotManager({
     roomCode,
@@ -92,7 +95,6 @@ export default function GameScreen() {
         currentTurnPlayerId={currentTurnPlayerId}
         previousPlayerId={previousPlayerId}
         myPlayerId={playerId}
-        phase={phase}
       />
 
       {/* Tavolo Centrale: Bussolotto 3D e Dichiarazione */}
@@ -102,7 +104,7 @@ export default function GameScreen() {
           actualRoll={displayActualRoll}
           isRevealed={isRevealed}
           isRollerPeeking={Boolean(isRollerPeeking)}
-          isRolling={false}
+          isRolling={isRolling}
           activePlayerName={currentTurnPlayer.nickname}
           isMyTurn={isMyTurn}
         />
@@ -112,7 +114,6 @@ export default function GameScreen() {
             declaredValue={declaredValue}
             previousPlayerName={previousPlayer ? previousPlayer.nickname : ''}
             phase={phase}
-            isMyTurn={isMyTurn}
           />
         )}
       </div>
@@ -125,6 +126,8 @@ export default function GameScreen() {
           playerId={playerId}
           localDiceState={localDiceState}
           setLocalDiceState={setLocalDiceState}
+          isRolling={isRolling}
+          setIsRolling={setIsRolling}
         />
       </div>
 

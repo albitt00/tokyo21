@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   generateDiceRoll,
   getScoreFromDice,
-  isScoreValidRaise,
-  TOKYO_SCORE,
 } from '../../utils/tokyoLogic';
 import {
   submitFirstRoll,
@@ -29,7 +27,6 @@ import {
   ShieldX,
   ShieldCheck,
   Send,
-  Sparkles,
 } from 'lucide-react';
 
 export default function GameControls({
@@ -39,6 +36,8 @@ export default function GameControls({
   onLocalDiceRolled,
   localDiceState,
   setLocalDiceState,
+  isRolling = false,
+  setIsRolling,
 }) {
   const gameState = roomData?.gameState || {};
   const players = roomData?.players || {};
@@ -49,7 +48,6 @@ export default function GameControls({
     currentTurnPlayerId,
     previousPlayerId,
     declaredValue,
-    actualRoll,
     lastRoundResult,
   } = gameState;
 
@@ -64,39 +62,63 @@ export default function GameControls({
   // Stato modale selettore dichiarazione
   const [showScoreModal, setShowScoreModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const rollTimeoutRef = useRef(null);
 
-  // 1. Azione: Primo Lancio del Round
+  // Pulizia timer al dismount
+  useEffect(() => {
+    return () => {
+      if (rollTimeoutRef.current) {
+        clearTimeout(rollTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  // 1. Azione: Primo Lancio del Round con Suspense Timer
   const handleFirstRollDice = () => {
+    setIsRolling?.(true);
     playDiceRollSound();
-    const dice = generateDiceRoll();
-    const rollScore = getScoreFromDice(dice[0], dice[1]);
 
-    setLocalDiceState({
-      diceValues: dice,
-      actualRoll: rollScore,
-      isPeeking: true,
-      mode: 'FIRST_ROLL',
-    });
+    if (rollTimeoutRef.current) clearTimeout(rollTimeoutRef.current);
 
-    onLocalDiceRolled?.(dice, rollScore);
-    setShowScoreModal(true);
+    rollTimeoutRef.current = setTimeout(() => {
+      const dice = generateDiceRoll();
+      const rollScore = getScoreFromDice(dice[0], dice[1]);
+
+      setIsRolling?.(false);
+      setLocalDiceState({
+        diceValues: dice,
+        actualRoll: rollScore,
+        isPeeking: true,
+        mode: 'FIRST_ROLL',
+      });
+
+      onLocalDiceRolled?.(dice, rollScore);
+      setShowScoreModal(true);
+    }, 1800);
   };
 
-  // 2. Azione: CREDO (Accetta e Rilancia)
+  // 2. Azione: CREDO (Accetta e Rilancia con Suspense Timer)
   const handleCredoAccept = () => {
+    setIsRolling?.(true);
     playDiceRollSound();
-    const dice = generateDiceRoll();
-    const rollScore = getScoreFromDice(dice[0], dice[1]);
 
-    setLocalDiceState({
-      diceValues: dice,
-      actualRoll: rollScore,
-      isPeeking: true,
-      mode: 'ROLLING',
-    });
+    if (rollTimeoutRef.current) clearTimeout(rollTimeoutRef.current);
 
-    onLocalDiceRolled?.(dice, rollScore);
-    setShowScoreModal(true);
+    rollTimeoutRef.current = setTimeout(() => {
+      const dice = generateDiceRoll();
+      const rollScore = getScoreFromDice(dice[0], dice[1]);
+
+      setIsRolling?.(false);
+      setLocalDiceState({
+        diceValues: dice,
+        actualRoll: rollScore,
+        isPeeking: true,
+        mode: 'ROLLING',
+      });
+
+      onLocalDiceRolled?.(dice, rollScore);
+      setShowScoreModal(true);
+    }, 1800);
   };
 
   // Conferma Dichiarazione dal Modale
@@ -177,37 +199,53 @@ export default function GameControls({
       {phase === 'FIRST_ROLL' && (
         <div className="controls-phase-wrap">
           {isMyTurn ? (
-            <div className="my-turn-actions">
-              <span className="turn-action-prompt">
-                Tocca a te iniziare il round! Lancia i dadi sotto il bussolotto:
-              </span>
-              {!localDiceState ? (
-                <button
-                  type="button"
-                  className="primary-btn roll-action-btn pulse-glow"
-                  onClick={handleFirstRollDice}
-                  disabled={isSubmitting}
-                >
-                  <Dices size={24} />
-                  <span>Lancia i Dadi</span>
-                </button>
-              ) : (
-                <button
-                  type="button"
-                  className="primary-btn pass-action-btn pulse-glow"
-                  onClick={() => setShowScoreModal(true)}
-                  disabled={isSubmitting}
-                >
-                  <Send size={20} />
-                  <span>Scegli cosa dichiarare e passa a {nextPlayerName}</span>
-                </button>
-              )}
-            </div>
+            isRolling ? (
+              <div className="rolling-suspense-container">
+                <div className="rolling-loader-spinner">
+                  <Dices className="spinning-dice-icon" size={28} />
+                </div>
+                <div className="rolling-text-wrap">
+                  <span className="rolling-title">Scuoti il bussolotto...</span>
+                  <span className="rolling-subtitle">I dadi sbattono nel cuoio sul feltro verde</span>
+                </div>
+              </div>
+            ) : (
+              <div className="my-turn-actions">
+                <span className="turn-action-prompt">
+                  Tocca a te iniziare il round! Lancia i dadi sotto il bussolotto:
+                </span>
+                {!localDiceState ? (
+                  <button
+                    type="button"
+                    className="primary-btn roll-action-btn pulse-glow"
+                    onClick={handleFirstRollDice}
+                    disabled={isSubmitting}
+                  >
+                    <Dices size={24} />
+                    <span>Lancia i Dadi</span>
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    className="primary-btn pass-action-btn pulse-glow"
+                    onClick={() => setShowScoreModal(true)}
+                    disabled={isSubmitting}
+                  >
+                    <Send size={20} />
+                    <span>Scegli cosa dichiarare e passa a {nextPlayerName}</span>
+                  </button>
+                )}
+              </div>
+            )
           ) : (
             <div className="waiting-turn-box">
               <div className="pulse-dot"></div>
               <span>
-                In attesa che <strong>{currentTurnPlayer.nickname}</strong> lanci i dadi...
+                {currentTurnPlayer.isBot ? (
+                  <>🤖 <strong>{currentTurnPlayer.nickname}</strong> sta preparando il lancio...</>
+                ) : (
+                  <>In attesa che <strong>{currentTurnPlayer.nickname}</strong> lanci i dadi...</>
+                )}
               </span>
             </div>
           )}
@@ -220,7 +258,17 @@ export default function GameControls({
       {phase === 'DECISION' && (
         <div className="controls-phase-wrap">
           {isMyTurn ? (
-            localDiceState ? (
+            isRolling ? (
+              <div className="rolling-suspense-container">
+                <div className="rolling-loader-spinner">
+                  <Dices className="spinning-dice-icon" size={28} />
+                </div>
+                <div className="rolling-text-wrap">
+                  <span className="rolling-title">Hai accettato! Rilancio in corso...</span>
+                  <span className="rolling-subtitle">I tuoi nuovi dadi segreti stanno rotolando</span>
+                </div>
+              </div>
+            ) : localDiceState ? (
               <div className="my-turn-actions">
                 <span className="turn-action-prompt">
                   Hai accettato! Dadi reali: <strong>{localDiceState.actualRoll}</strong>. Ora scegli cosa dichiarare:
@@ -277,7 +325,11 @@ export default function GameControls({
             <div className="waiting-turn-box">
               <div className="pulse-dot"></div>
               <span>
-                In attesa della decisione di <strong>{currentTurnPlayer.nickname}</strong>...
+                {currentTurnPlayer.isBot ? (
+                  <>🤖 <strong>{currentTurnPlayer.nickname}</strong> sta valutando la mossa...</>
+                ) : (
+                  <>In attesa della decisione di <strong>{currentTurnPlayer.nickname}</strong>...</>
+                )}
               </span>
             </div>
           )}

@@ -1,9 +1,9 @@
 import React from 'react';
 import DiceFace from './DiceFace';
-import { Eye, EyeOff, Lock } from 'lucide-react';
+import { Eye, Lock, Dices } from 'lucide-react';
 
 /**
- * Bussolotto per il gioco di Tokyo 21
+ * Bussolotto per il gioco di Tokyo 21 con animazione di suspense
  */
 export default function DiceCup({
   diceValues = [1, 1],
@@ -12,36 +12,46 @@ export default function DiceCup({
   isRollerPeeking = false,
   isRolling = false,
   activePlayerName = 'Giocatore',
-  isMyTurn = false,
+  _isMyTurn = false,
 }) {
-  const showDice = isRevealed || isRollerPeeking;
+  const showDice = (isRevealed || isRollerPeeking) && !isRolling;
 
   return (
     <div className="dice-cup-arena">
       <div className="arena-felt-table">
         {/* Feltro da gioco con cerchio dorato */}
         <div className="felt-ring">
-          {/* I due dadi sul tavolo */}
-          <div className={`table-dice-layer ${showDice ? 'dice-visible' : 'dice-hidden'}`}>
-            {diceValues && diceValues.length === 2 ? (
-              <div className="dice-pair">
-                <DiceFace value={diceValues[0]} rolling={isRolling} size="lg" />
-                <DiceFace value={diceValues[1]} rolling={isRolling} size="lg" />
+          {/* Rendering condizionale: durante isRolling mostra l'animazione di scuotimento, altrimenti dadi fissi */}
+          {isRolling ? (
+            <div className="rolling-dice-ghost-wrap">
+              <div className="rolling-dice-pair-anim">
+                <div className="ghost-die die-1">🎲</div>
+                <div className="ghost-die die-2">🎲</div>
               </div>
-            ) : (
-              <div className="empty-dice-placeholder">
-                <span>Dadi nel bussolotto</span>
-              </div>
-            )}
-            {showDice && actualRoll && (
-              <div className="real-roll-tag">
-                <span>Valore Reale: </span>
-                <strong>{actualRoll}</strong>
-              </div>
-            )}
-          </div>
+              <span className="rolling-pulse-text">Dadi in scuotimento...</span>
+            </div>
+          ) : (
+            <div className={`table-dice-layer ${showDice ? 'dice-visible' : 'dice-hidden'}`}>
+              {diceValues && diceValues.length === 2 ? (
+                <div className="dice-pair">
+                  <DiceFace value={diceValues[0]} size="lg" />
+                  <DiceFace value={diceValues[1]} size="lg" />
+                </div>
+              ) : (
+                <div className="empty-dice-placeholder">
+                  <span>Dadi nel bussolotto</span>
+                </div>
+              )}
+              {showDice && actualRoll && (
+                <div className="real-roll-tag">
+                  <span>Valore Reale: </span>
+                  <strong>{actualRoll}</strong>
+                </div>
+              )}
+            </div>
+          )}
 
-          {/* Il Bussolotto (Cup) 3D */}
+          {/* Il Bussolotto (Cup) 3D con scuotimento e ombra dinamica */}
           <div
             className={`bussolotto-cup ${isRevealed ? 'cup-lifted' : 'cup-closed'} ${
               isRolling ? 'cup-shaking' : ''
@@ -52,13 +62,18 @@ export default function DiceCup({
               <div className="cup-emblem">🏺</div>
               <div className="cup-label">TOKYO 21</div>
             </div>
-            <div className="cup-shadow"></div>
+            <div className={`cup-shadow ${isRolling ? 'cup-shadow-shaking' : ''}`}></div>
           </div>
         </div>
 
         {/* Etichetta di stato sotto il bussolotto */}
         <div className="cup-status-strip">
-          {isRevealed ? (
+          {isRolling ? (
+            <div className="status-rolling-pill">
+              <Dices size={15} className="spinning-dice-icon" />
+              <span>Scuotimento bussolotto in corso...</span>
+            </div>
+          ) : isRevealed ? (
             <div className="status-revealed-pill">
               <Eye size={14} className="gold-text" />
               <span>Bussolotto Alzato! Dadi svelati a tutti</span>

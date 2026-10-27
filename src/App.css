@@ -2227,3 +2227,171 @@
   0%, 100% { opacity: 1; }
   50% { opacity: 0.55; }
 }
+
+/* ==========================================================================
+   ANIMAZIONE SCUOTIMENTO BUSSOLOTTO & SUSPENSE DEI DADI (DARK LOUNGE THEME)
+   ========================================================================== */
+
+@keyframes shake-cup-suspense {
+  0% {
+    transform: translate(-3px, -2px) rotate(-3.5deg);
+  }
+  25% {
+    transform: translate(3px, 1px) rotate(3deg);
+  }
+  50% {
+    transform: translate(-2px, 3px) rotate(-2deg);
+  }
+  75% {
+    transform: translate(4px, -1px) rotate(4deg);
+  }
+  100% {
+    transform: translate(-1px, 2px) rotate(-3deg);
+  }
+}
+
+/* Ombra dinamica sincronizzata sotto il bussolotto */
+.cup-shadow-shaking {
+  animation: shadow-rattle 0.12s infinite ease-in-out alternate;
+}
+
+@keyframes shadow-rattle {
+  0% {
+    transform: scale(0.92, 0.88) translate(-2px, 0);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(1.08, 1.05) translate(2px, 1px);
+    opacity: 0.85;
+  }
+  100% {
+    transform: scale(0.95, 0.9) translate(-1px, -1px);
+    opacity: 0.65;
+  }
+}
+
+/* Dadi dinamici che rimbalzano e ruotano durante lo scuotimento */
+.rolling-dice-ghost-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 6;
+  pointer-events: none;
+}
+
+.rolling-dice-pair-anim {
+  display: flex;
+  gap: 14px;
+}
+
+.ghost-die {
+  font-size: 2.2rem;
+  filter: drop-shadow(0 0 12px rgba(245, 197, 66, 0.85));
+  user-select: none;
+}
+
+.ghost-die.die-1 {
+  animation: die-tumble-1 0.4s infinite linear;
+}
+
+.ghost-die.die-2 {
+  animation: die-tumble-2 0.35s infinite linear reverse;
+}
+
+@keyframes die-tumble-1 {
+  0% { transform: translateY(0) rotate(0deg) scale(0.9); }
+  50% { transform: translateY(-12px) rotate(180deg) scale(1.15); }
+  100% { transform: translateY(0) rotate(360deg) scale(0.9); }
+}
+
+@keyframes die-tumble-2 {
+  0% { transform: translateY(0) rotate(0deg) scale(1.1); }
+  50% { transform: translateY(-8px) rotate(-180deg) scale(0.85); }
+  100% { transform: translateY(0) rotate(-360deg) scale(1.1); }
+}
+
+.rolling-pulse-text {
+  font-size: 0.76rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--gold-light);
+  text-shadow: 0 0 10px rgba(245, 197, 66, 0.7);
+  animation: pulse-glow-text 0.8s infinite ease-in-out alternate;
+}
+
+@keyframes pulse-glow-text {
+  0% { opacity: 0.6; transform: scale(0.96); }
+  100% { opacity: 1; transform: scale(1.04); }
+}
+
+/* Striscia di stato attiva durante isRolling */
+.status-rolling-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(245, 197, 66, 0.18);
+  border: 1px solid rgba(245, 197, 66, 0.6);
+  box-shadow: 0 0 14px rgba(245, 197, 66, 0.3);
+  color: var(--gold-light);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  animation: pulse-glow-border 0.8s infinite ease-in-out alternate;
+}
+
+@keyframes pulse-glow-border {
+  0% { box-shadow: 0 0 8px rgba(245, 197, 66, 0.2); }
+  100% { box-shadow: 0 0 18px rgba(245, 197, 66, 0.55); }
+}
+
+/* Riquadro suspense nei controlli di gioco */
+.rolling-suspense-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 16px 20px;
+  background: rgba(10, 20, 15, 0.78);
+  border: 1px solid rgba(245, 197, 66, 0.45);
+  border-radius: 14px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(245, 197, 66, 0.08);
+  position: relative;
+  overflow: hidden;
+  animation: fadeInUp 0.25s ease-out;
+}
+
+.spinning-dice-icon {
+  color: var(--gold-primary);
+  animation: spin-dice 0.6s infinite linear;
+  filter: drop-shadow(0 0 8px rgba(245, 197, 66, 0.7));
+}
+
+@keyframes spin-dice {
+  0% { transform: rotate(0deg) scale(0.9); }
+  50% { transform: rotate(180deg) scale(1.12); }
+  100% { transform: rotate(360deg) scale(0.9); }
+}
+
+.rolling-title {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--gold-light);
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+
+.rolling-subtitle {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  text-align: center;
+}
